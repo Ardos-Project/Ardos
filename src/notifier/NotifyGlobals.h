@@ -1,0 +1,13 @@
+#ifndef NOTIFY_GLOBALS_H
+#define NOTIFY_GLOBALS_H
+
+enum class NotifyGlobals
+{
+	NOTIFY_VERBOSE = 5,
+	NOTIFY_INFO = 4,
+	NOTIFY_WARNING = 3,
+	NOTIFY_ERROR = 2,
+	NOTIFY_NONE = 1
+};
+
+#endif // NOTIFY_GLOBALS_H
