@@ -25,3 +25,4 @@ add_executable(ardos
 )
 
 include_directories(src)
+include_directories(thirdparty)
