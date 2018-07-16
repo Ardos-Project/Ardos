@@ -1,5 +1,12 @@
 #include "Notify.h"
 
+Notify* Notify::_instance = 0;
+Notify* Notify::instance()
+{
+	if (_instance == 0) { _instance = new Notify(); }
+	return _instance;
+}
+
 Notify::Notify()
 {
 	// Set default notify level (Info).

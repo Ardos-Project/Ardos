@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.10)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 project(Ardos)
 
+find_package(Boost 1.67 REQUIRED COMPONENTS program_options)
+
 set(ARDOS_CORE
 	src/core/main.cpp	
 	src/core/globals.h
@@ -26,3 +28,6 @@ add_executable(ardos
 
 include_directories(src)
 include_directories(thirdparty)
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+
+target_link_libraries(ardos ${Boost_LIBRARIES})

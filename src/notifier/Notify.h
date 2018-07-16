@@ -12,7 +12,7 @@
 class Notify
 {
 	public:
-		Notify();
+		static Notify* instance();
 		NotifyGlobals getNotifyLevel();
 		void setNotifyLevel(NotifyGlobals);
 		void verbose(std::string);
@@ -21,8 +21,10 @@ class Notify
 		void error(std::string);
 
 	private:
+		static Notify* _instance;
 		NotifyGlobals notify_level;
 
+		Notify(); // Prevent accidental object creation.
 		std::string getFormattedDateTime();
 };
 

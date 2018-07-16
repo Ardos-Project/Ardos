@@ -1,15 +1,19 @@
 #include <iostream>
 
 #include "globals.h"
+#include "notifier/Notify.h"
+#include "config/ConfigManager.h"
 
 int main(int argc, char *argv[])
 {
-	// Set up notify global.
-	std::unique_ptr<Notify> g_notify(new Notify());
+	// Set up our notify instance.
+	Notify::instance();
 
-	// Set up config manager global and load config file.
-	std::unique_ptr<ConfigManager> g_config(new ConfigManager());
+	// Set up our config instance.
+	ConfigManager::instance();
 
-	g_notify->warning("Test");
+	// Load our either passed config file or default one.
+	//ConfigManager::instance()->loadConfig();
+
 	return 0;
 }
