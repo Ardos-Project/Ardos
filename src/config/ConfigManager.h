@@ -9,10 +9,10 @@ class ConfigManager
 {
 	public:
 		static ConfigManager* instance();
+		void loadConfig(std::string);
 
 	private:
 		static ConfigManager* _instance;
-		std::string cfg_name_default;
 
 		ConfigManager(); // Prevent accidental object creation.
 };

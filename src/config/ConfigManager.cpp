@@ -11,3 +11,8 @@ ConfigManager::ConfigManager()
 {
 
 }
+
+void ConfigManager::loadConfig(std::string cfg_name)
+{
+	
+}
