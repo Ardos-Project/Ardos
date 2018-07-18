@@ -12,6 +12,10 @@ class ConfigManager
 	public:
 		static ConfigManager* instance();
 		void loadConfig(std::string);
+		std::string getString(std::string, std::string = "");
+		int getInt(std::string, int = 0);
+		bool getBool(std::string, bool = false);
+		nlohmann::json getNode(std::string, nlohmann::json = {});
 
 	private:
 		static ConfigManager* _instance;
