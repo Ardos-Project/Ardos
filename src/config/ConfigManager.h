@@ -4,6 +4,8 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <string>
+#include <exception> // std::exception
+#include <cstdlib> // std::exit
 
 #include "notifier/Notify.h"
 

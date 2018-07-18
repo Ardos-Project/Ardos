@@ -28,8 +28,17 @@ void ConfigManager::loadConfig(std::string cfg_name)
 	// Make sure we have an empty data object.
 	this->cfg_data.clear();
 
-	// Read the stream into the data object.
-	cfg_file >> this->cfg_data;
+	try
+	{
+		// Read the stream into the data object.
+		cfg_file >> this->cfg_data;
+	}
+	catch (std::exception& e)
+	{
+		Notify::instance()->error("Error parsing config file!");
+		std::cout << e.what() << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
 
 	// Close the config file.
 	cfg_file.close();
