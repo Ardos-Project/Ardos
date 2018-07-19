@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
 		else if (boost::iequals(argv[i], "--help"))
 		{
-			Notify::instance()->info("Help Message");
+			Notify::instance()->log(NotifyGlobals::NOTIFY_INFO, "[MAIN]", "Help Message");
 		}
 	}
 

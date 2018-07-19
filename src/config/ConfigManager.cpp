@@ -21,7 +21,7 @@ void ConfigManager::loadConfig(std::string cfg_name)
 
 	if (!cfg_file.is_open())
 	{
-		Notify::instance()->error("Could not find config file: " + cfg_name);
+		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[MAIN]", "Could not find config file: " + cfg_name);
 		return;
 	}
 
@@ -35,7 +35,8 @@ void ConfigManager::loadConfig(std::string cfg_name)
 	}
 	catch (std::exception& e)
 	{
-		Notify::instance()->error("Error parsing config file!");
+		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[MAIN]", "Error parsing config file!");
+
 		std::cout << e.what() << std::endl;
 		std::exit(EXIT_FAILURE);
 	}

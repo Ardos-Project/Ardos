@@ -39,47 +39,38 @@ std::string Notify::getFormattedDateTime()
 	struct tm time_info;
 	localtime_s(&time_info, &t);
 	std::ostringstream date_string;
-	date_string << std::put_time(&time_info, "[%m/%d/%Y %H:%M:%S]");
+	date_string << std::put_time(&time_info, "[%m/%d/%Y %H:%M:%S] ");
 
 	return date_string.str();
 }
 
 /*
-Output a new message at the verbose level.
+Output a new message at the parsed level and origin.
 */
-void Notify::verbose(std::string message)
+void Notify::log(NotifyGlobals level, std::string origin, std::string message)
 {
-	if (this->notify_level < NotifyGlobals::NOTIFY_VERBOSE) { return; }
-	std::string time = this->getFormattedDateTime();
-	std::cout << time << " [VERBOSE]: " << message << std::endl;
-}
+	std::lock_guard<std::mutex> guard(notify_lock);
 
-/*
-Output a new message at the info level.
-*/
-void Notify::info(std::string message)
-{
-	if (this->notify_level < NotifyGlobals::NOTIFY_INFO) { return; }
 	std::string time = this->getFormattedDateTime();
-	std::cout << time << " [INFO]: " << message << std::endl;
-}
-
-/*
-Output a new message at the warning level.
-*/
-void Notify::warning(std::string message)
-{
-	if (this->notify_level < NotifyGlobals::NOTIFY_WARNING) { return; }
-	std::string time = this->getFormattedDateTime();
-	std::cout << time << " [WARNING]: " << message << std::endl;
-}
-
-/*
-Output a new message at the error level.
-*/
-void Notify::error(std::string message)
-{
-	if (this->notify_level < NotifyGlobals::NOTIFY_ERROR) { return; }
-	std::string time = this->getFormattedDateTime();
-	std::cout << time << " [ERROR]: " << message << std::endl;
+	switch (level)
+	{
+		case NotifyGlobals::NOTIFY_VERBOSE:
+			if (this->notify_level < NotifyGlobals::NOTIFY_VERBOSE) { break; }
+			std::cout << time << origin << " [VERBOSE]: " << message << std::endl;
+			break;
+		case NotifyGlobals::NOTIFY_INFO:
+			if (this->notify_level < NotifyGlobals::NOTIFY_INFO) { break; }
+			std::cout << time << origin << " [INFO]: " << message << std::endl;
+			break;
+		case NotifyGlobals::NOTIFY_WARNING:
+			if (this->notify_level < NotifyGlobals::NOTIFY_WARNING) { break; }
+			std::cout << time << origin << " [WARNING]: " << message << std::endl;
+			break;
+		case NotifyGlobals::NOTIFY_ERROR:
+			if (this->notify_level < NotifyGlobals::NOTIFY_ERROR) { break; }
+			std::cout << time << origin << " [ERROR]: " << message << std::endl;
+			break;
+		default:
+			break;
+	}
 }

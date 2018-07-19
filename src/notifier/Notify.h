@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <ctime>
+#include <mutex>
 
 #include "NotifyGlobals.h"
 
@@ -15,14 +16,12 @@ class Notify
 		static Notify* instance();
 		NotifyGlobals getNotifyLevel();
 		void setNotifyLevel(NotifyGlobals);
-		void verbose(std::string);
-		void info(std::string);
-		void warning(std::string);
-		void error(std::string);
+		void log(NotifyGlobals, std::string, std::string);
 
 	private:
 		static Notify* _instance;
 		NotifyGlobals notify_level;
+		std::mutex notify_lock;
 
 		Notify(); // Prevent accidental object creation.
 		std::string getFormattedDateTime();
