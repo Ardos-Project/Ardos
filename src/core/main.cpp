@@ -1,4 +1,5 @@
 #include <boost/algorithm/string/predicate.hpp> // boost::iequals
+#include <atomic>
 
 #include "globals.h"
 #include "notifier/Notify.h"
@@ -6,6 +7,9 @@
 
 int main(int argc, char *argv[])
 {
+	// When set to false, main thread exits.
+	std::atomic<bool> is_running = true;
+
 	// Set up our notify instance.
 	Notify::instance();
 
@@ -33,6 +37,19 @@ int main(int argc, char *argv[])
 
 	// Load our either passed config file or default one.
 	ConfigManager::instance()->loadConfig(cfg_name);
+
+	/*
+	Starting up of (essentially) daemon threads to run each process of the core Ardos 'cloud'.
+	Different components can be configured to not run depending on an individuals setup.
+	*/
+
+
+
+	// Stop the main thread from exiting.
+	while (is_running)
+	{
+		continue;
+	}
 
 	return 0;
 }
