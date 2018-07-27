@@ -23,6 +23,13 @@ set(ARDOS_CONFIG
 	src/config/ConfigManager.h
 )
 
+set(ARDOS_NET
+	src/net/NetworkWriter.cpp
+	src/net/NetworkWriter.h
+	src/net/NetworkReader.cpp
+	src/net/NetworkReader.h
+)
+
 set(ARDOS_MESSAGE_DIRECTOR
 	src/messagedirector/MDParticipant.cpp
 	src/messagedirector/MDParticipant.h
@@ -34,6 +41,7 @@ add_executable(ardos
 	${ARDOS_CORE}
 	${ARDOS_NOTIFY}
 	${ARDOS_CONFIG}
+	${ARDOS_NET}
 	${ARDOS_MESSAGE_DIRECTOR}
 )
 
