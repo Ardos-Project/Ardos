@@ -37,12 +37,18 @@ set(ARDOS_MESSAGE_DIRECTOR
 	src/messagedirector/MessageDirector.h
 )
 
+set(ARDOS_STATE_SERVER
+	src/stateserver/StateServer.cpp
+	src/stateserver/StateServer.h
+)
+
 add_executable(ardos
 	${ARDOS_CORE}
 	${ARDOS_NOTIFY}
 	${ARDOS_CONFIG}
 	${ARDOS_NET}
 	${ARDOS_MESSAGE_DIRECTOR}
+	${ARDOS_STATE_SERVER}
 )
 
 include_directories(src)

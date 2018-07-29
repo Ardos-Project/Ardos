@@ -1,8 +1,15 @@
 #include "net/NetworkReader.h"
 
+#include "net/NetworkWriter.h"
+
 NetworkReader::NetworkReader(std::string &data, unsigned int offest) : buffer(new char[data.length()]), buffer_end(data.length()), index(offest)
 {
 	std::memcpy(this->buffer, data.c_str(), data.length());
+}
+
+NetworkReader::NetworkReader(NetworkWriter &writer, unsigned int offset) : buffer(new char[writer.getSize()]), buffer_end(writer.getSize()), index(offset)
+{
+	std::memcpy(this->buffer, writer.getData(), writer.getSize());
 }
 
 NetworkReader::~NetworkReader()

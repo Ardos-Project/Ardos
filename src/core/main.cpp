@@ -8,6 +8,7 @@
 #include "notifier/Notify.h"
 #include "config/ConfigManager.h"
 #include "messagedirector/MessageDirector.h"
+#include "stateserver/StateServer.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,9 @@ int main(int argc, char *argv[])
 
 	// MessageDirector object.
 	MessageDirector* daemon_md = nullptr;
+
+	// StateServer object.
+	StateServer* daemon_ss = nullptr;
 
 	// Set up our notify instance.
 	Notify::instance();
@@ -82,6 +86,19 @@ int main(int argc, char *argv[])
 		daemon_md = new MessageDirector(&io_context, endpoint);
 	}
 
+	if (ConfigManager::instance()->getBool("want-ss"))
+	{
+		// MessageDirector connect IP address and port.
+		std::string md_ip = ConfigManager::instance()->getString("md-bind-ip", "127.0.0.1");
+		int md_port = ConfigManager::instance()->getInt("md-bind-port", 7199);
+
+		// Create our TCP endpoint.
+		boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(md_ip), md_port);
+
+		// Create the MessageDirector object.
+		daemon_ss = new StateServer(&io_context, endpoint);
+	}
+
 	// Stop the main thread from exiting.
 	while (is_running)
 	{
@@ -96,6 +113,7 @@ int main(int argc, char *argv[])
 	Notify::instance()->log(NotifyGlobals::NOTIFY_VERBOSE, "[MAIN]", "Cleaning up daemon's...");
 
 	delete daemon_md;
+	delete daemon_ss;
 
 	return 0;
 }

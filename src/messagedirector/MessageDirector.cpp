@@ -2,7 +2,7 @@
 
 using boost::asio::ip::tcp;
 
-MessageDirector::MessageDirector(boost::asio::io_context *io_context, const tcp::endpoint& endpoint)
+MessageDirector::MessageDirector(boost::asio::io_context *io_context, const tcp::endpoint &endpoint)
 {
 	Notify::instance()->log(NotifyGlobals::NOTIFY_INFO, "[MD]", "Message Director Online!");
 	this->io_context = io_context;
@@ -19,9 +19,9 @@ MessageDirector::~MessageDirector()
 
 void MessageDirector::doAccept()
 {
-	this->tcp_acceptor->async_accept([this](boost::system::error_code ec, tcp::socket socket)
+	this->tcp_acceptor->async_accept([this](boost::system::error_code err, tcp::socket socket)
 	{
-		if (!ec)
+		if (!err)
 		{
 			std::make_shared<MDParticipant>(std::move(socket), this)->start();
 			Notify::instance()->log(NotifyGlobals::NOTIFY_INFO, "[MD]", "New Client!");

@@ -24,7 +24,7 @@ void MDParticipant::start()
 
 void MDParticipant::doRead()
 {
-	boost::asio::async_read(this->socket, this->response_, boost::asio::transfer_at_least(1),
+	boost::asio::async_read(this->socket, this->socket_data, boost::asio::transfer_at_least(1),
 		boost::bind(&MDParticipant::handleReadContent, this, boost::asio::placeholders::error));
 }
 
@@ -33,17 +33,17 @@ void MDParticipant::handleReadContent(const boost::system::error_code &err)
 	if (!err)
 	{
 		// Read our received data stream into a string.
-		boost::asio::streambuf::const_buffers_type bufs = this->response_.data();
+		boost::asio::streambuf::const_buffers_type bufs = this->socket_data.data();
 		std::string str(
 			boost::asio::buffers_begin(bufs),
-			boost::asio::buffers_begin(bufs) + this->response_.size());
+			boost::asio::buffers_begin(bufs) + this->socket_data.size());
 
 		// Start async reading again.
 		this->doRead();
 	}
 }
 
-void MDParticipant::write(NetworkWriter &packet)
+void MDParticipant::send(NetworkWriter *packet)
 {
 	this->outgoing_queue.push(packet);
 
@@ -62,10 +62,10 @@ void MDParticipant::socketWrite()
 	if (this->outgoing_queue.empty()) { return; }
 
 	// Read our front packet and pop the queue.
-	NetworkWriter& packet = this->outgoing_queue.front();
+	NetworkWriter *packet = this->outgoing_queue.front();
 	this->outgoing_queue.pop();
 
-	boost::asio::async_write(this->socket, boost::asio::buffer(packet.getData(), packet.getSize()),
+	boost::asio::async_write(this->socket, boost::asio::buffer(packet->getData(), packet->getSize()),
 		boost::bind(&MDParticipant::handleWriteContent, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 }
 

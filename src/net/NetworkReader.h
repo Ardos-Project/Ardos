@@ -8,10 +8,13 @@
 #include "notifier/Notify.h"
 #include "net/NetworkWriter.h"
 
+class NetworkWriter;
+
 class NetworkReader
 {
 	public:
 		NetworkReader(std::string &data, unsigned int offset = 0);
+		NetworkReader(NetworkWriter &data, unsigned int offset = 0);
 		~NetworkReader();
 		int8_t readInt8();
 		std::string readString();

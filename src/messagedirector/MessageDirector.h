@@ -15,7 +15,7 @@ class MessageDirector
 	public:
 		std::set<md_participant_ptr> md_participants;
 
-		MessageDirector(boost::asio::io_context *io_context, const boost::asio::ip::tcp::endpoint& endpoint);
+		MessageDirector(boost::asio::io_context *io_context, const boost::asio::ip::tcp::endpoint &endpoint);
 		~MessageDirector();
 
 	private:
