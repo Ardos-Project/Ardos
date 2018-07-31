@@ -15,6 +15,7 @@ class MDParticipant : public std::enable_shared_from_this<MDParticipant>, public
 		~MDParticipant();
 
 		void start();
+		virtual void handleData(std::string &data);
 
 	private:
 		MessageDirector *parent;

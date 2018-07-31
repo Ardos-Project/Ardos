@@ -19,3 +19,8 @@ void MDParticipant::start()
 	// Start async reading from our socket.
 	this->doRead();
 }
+
+void MDParticipant::handleData(std::string &data)
+{
+	std::unique_ptr<NetworkReader> reader(new NetworkReader(data));
+}
