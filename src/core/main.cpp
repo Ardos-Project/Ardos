@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	Different components can be configured to not run depending on an individuals setup.
 	*/
 
-	if (ConfigManager::instance()->getBool("want-md"))
+	if (ConfigManager::instance()->getBool("want-md", true))
 	{
 		// MessageDirector bind IP address and port.
 		std::string md_bind_ip = ConfigManager::instance()->getString("md-bind-ip", "127.0.0.1");
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 		daemon_md = new MessageDirector(&io_context, endpoint);
 	}
 
-	if (ConfigManager::instance()->getBool("want-ss"))
+	if (ConfigManager::instance()->getBool("want-ss", true))
 	{
 		// MessageDirector connect IP address and port.
 		std::string md_ip = ConfigManager::instance()->getString("md-bind-ip", "127.0.0.1");
