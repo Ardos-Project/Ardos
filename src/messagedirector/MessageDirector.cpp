@@ -23,7 +23,7 @@ void MessageDirector::doAccept()
 	{
 		if (!err)
 		{
-			std::make_shared<MDParticipant>(std::move(socket), this)->start();
+			std::make_shared<MDParticipant>(this->io_context, std::move(socket), this)->start();
 			Notify::instance()->log(NotifyGlobals::NOTIFY_INFO, "[MD]", "New Client!");
 		}
 

@@ -24,6 +24,10 @@ set(ARDOS_CONFIG
 )
 
 set(ARDOS_NET
+	src/net/NetworkServer.cpp
+	src/net/NetworkServer.h
+	src/net/NetworkClient.cpp
+	src/net/NetworkClient.h
 	src/net/NetworkWriter.cpp
 	src/net/NetworkWriter.h
 	src/net/NetworkReader.cpp

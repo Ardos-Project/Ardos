@@ -95,8 +95,11 @@ int main(int argc, char *argv[])
 		// Create our TCP endpoint.
 		boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(md_ip), md_port);
 
+		// Create our socket object.
+		boost::asio::ip::tcp::socket socket(io_context);
+
 		// Create the MessageDirector object.
-		daemon_ss = new StateServer(&io_context, endpoint);
+		daemon_ss = new StateServer(&io_context, std::move(socket), endpoint);
 	}
 
 	// Stop the main thread from exiting.
