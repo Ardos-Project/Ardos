@@ -6,6 +6,7 @@
 
 #include "notifier/Notify.h"
 #include "config/ConfigManager.h"
+#include "messagedirector/ParticipantTypes.h"
 #include "messagedirector/MDParticipant.h"
 
 class MessageDirector
@@ -17,6 +18,8 @@ class MessageDirector
 
 		MessageDirector(boost::asio::io_context *io_context, const boost::asio::ip::tcp::endpoint &endpoint);
 		~MessageDirector();
+
+		void handleData(std::shared_ptr<MDParticipant> participant, std::string &data);
 
 	private:
 		boost::asio::io_context *io_context;

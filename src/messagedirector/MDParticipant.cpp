@@ -20,7 +20,10 @@ void MDParticipant::start()
 	this->doRead();
 }
 
+/*
+All incoming data is handled by the parent Message Director.
+*/
 void MDParticipant::handleData(std::string &data)
 {
-	std::unique_ptr<NetworkReader> reader(new NetworkReader(data));
+	this->parent->handleData(shared_from_this(), data);
 }
