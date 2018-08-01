@@ -16,7 +16,13 @@ class NetworkReader
 		NetworkReader(std::string &data, unsigned int offset = 0);
 		NetworkReader(NetworkWriter &data, unsigned int offset = 0);
 		~NetworkReader();
+
 		int8_t readInt8();
+		uint8_t readUint8();
+
+		int16_t readInt16();
+		uint16_t readUint16();
+
 		std::string readString();
 
 	private:

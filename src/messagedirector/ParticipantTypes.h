@@ -9,7 +9,15 @@ enum class ParticipantTypes
 	All other participants are allocated a unique Participant ID between the defined range.
 	*/
 
+	// Message Director Participant ID.
+	MESSAGE_DIRECTOR_PID = 1,
 
+	// State Server Participant ID.
+	STATE_SERVER_PID = 2,
+
+	// First 100 reserved for pre-allocated ID's.
+	PID_RANGE_START = 101,
+	PID_RANGE_END = 65534 // Max uint16 size - 1
 };
 
 #endif // PARTICIPANT_TYPES_H

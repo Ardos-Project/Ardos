@@ -30,3 +30,27 @@ void NetworkWriter::addInt8(int8_t &value)
 	*(int8_t*)(this->buffer + this->index) = value;
 	this->index += 1;
 }
+
+void NetworkWriter::addUint8(uint8_t &value)
+{
+	this->checkAddOverflow(1);
+
+	*(uint8_t*)(this->buffer + this->index) = value;
+	this->index += 1;
+}
+
+void NetworkWriter::addInt16(int16_t &value)
+{
+	this->checkAddOverflow(2);
+
+	*(int16_t*)(this->buffer + this->index) = value;
+	this->index += 2;
+}
+
+void NetworkWriter::addUint16(uint16_t &value)
+{
+	this->checkAddOverflow(2);
+
+	*(uint16_t*)(this->buffer + this->index) = value;
+	this->index += 2;
+}
