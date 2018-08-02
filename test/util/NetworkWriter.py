@@ -11,18 +11,14 @@ class NetworkWriter:
 	def getSize(self):
 		return len(self._data)
 
-	def addRaw(self, data):
-		self._data += data
-
-	def addSize(self, size):
-		self.addRaw(struct.pack('<I', size))
-
-	def addString(self, string):
-		self.addSize(len(string))
-		self.addRaw(str.encode(string))
-
 	def addInt8(self, int8):
-		self.addRaw(struct.pack('<b', int8))
+		self._data += struct.pack('<b', int8)
 
 	def addUint8(self, uint8):
-		self.addRaw(struct.pack('<B', uint8))
+		self._data += struct.pack('<B', uint8)
+
+	def addInt16(self, int16):
+		self._data += struct.pack('<h', int16)
+
+	def addUint16(self, uint16):
+		self._data += struct.pack('<H', uint16)
