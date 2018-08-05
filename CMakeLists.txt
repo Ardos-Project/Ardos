@@ -10,6 +10,7 @@ find_package(Boost 1.67 COMPONENTS system date_time regex REQUIRED)
 set(ARDOS_CORE
 	src/core/globals.h
 	src/core/MsgTypes.h
+	src/core/ParticipantTypes.h
 	src/core/main.cpp
 )
 
@@ -36,7 +37,6 @@ set(ARDOS_NET
 )
 
 set(ARDOS_MESSAGE_DIRECTOR
-	src/messagedirector/ParticipantTypes.h
 	src/messagedirector/MDParticipant.cpp
 	src/messagedirector/MDParticipant.h
 	src/messagedirector/MessageDirector.cpp

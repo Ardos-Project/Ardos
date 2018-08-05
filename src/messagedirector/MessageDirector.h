@@ -9,7 +9,7 @@
 #include "core/MsgTypes.h"
 #include "notifier/Notify.h"
 #include "config/ConfigManager.h"
-#include "messagedirector/ParticipantTypes.h"
+#include "core/ParticipantTypes.h"
 #include "messagedirector/MDParticipant.h"
 
 class MessageDirector
