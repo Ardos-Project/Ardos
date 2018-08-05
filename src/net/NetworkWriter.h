@@ -1,7 +1,10 @@
 #ifndef NETWORK_WRITER_H
 #define NETWORK_WRITER_H
 
+#include <string>
 #include <cstdint>
+
+class NetworkReader;
 
 class NetworkWriter
 {
@@ -12,11 +15,13 @@ class NetworkWriter
 		char* getData();
 		unsigned int getSize();
 
-		void addInt8(int8_t &value);
-		void addUint8(uint8_t &value);
+		void addRaw(const std::string &value);
 
-		void addInt16(int16_t &value);
-		void addUint16(uint16_t &value);
+		void addInt8(const int8_t &value);
+		void addUint8(const uint8_t &value);
+
+		void addInt16(const int16_t &value);
+		void addUint16(const uint16_t &value);
 
 	private:
 		char* buffer;

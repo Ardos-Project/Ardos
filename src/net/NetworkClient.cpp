@@ -45,6 +45,9 @@ void NetworkClient::handleReadContent(const boost::system::error_code &err)
 		// Should be overridden by inheritors.
 		this->handleData(str);
 
+		// Clear the buffer of old data.
+		this->socket_data.consume(this->socket_data.size());
+
 		// Start async reading again.
 		this->doRead();
 	}

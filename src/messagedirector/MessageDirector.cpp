@@ -35,6 +35,37 @@ void MessageDirector::doAccept()
 	});
 }
 
+void MessageDirector::mapPid(uint16_t pid, MDParticipant *participant)
+{
+	std::lock_guard<std::mutex> guard(this->pid_lock);
+
+	if (this->pid_map.count(pid))
+	{
+		Notify::instance()->log(NotifyGlobals::NOTIFY_WARNING, "[MD]", "Attempted to map existing pid");
+		return;
+	}
+
+	this->pid_map[pid] = participant;
+}
+
+void MessageDirector::clearPid(uint16_t pid)
+{
+	std::lock_guard<std::mutex> guard(this->pid_lock);
+
+	this->pid_map.erase(pid);
+}
+
+void MessageDirector::routePid(uint16_t pid, NetworkWriter *writer)
+{
+	if (!this->pid_map.count(pid))
+	{
+		Notify::instance()->log(NotifyGlobals::NOTIFY_WARNING, "[MD]", "Attempted to route to non-existent pid");
+		return;
+	}
+
+	this->pid_map[pid]->send(writer);
+}
+
 uint16_t MessageDirector::allocateParticipantId()
 {
 	if (this->participant_count + 1 > (uint16_t)ParticipantTypes::PID_RANGE_END)
@@ -52,7 +83,7 @@ uint16_t MessageDirector::allocateParticipantId()
 /*
 Called by MDParticipants when they have data we need to handle.
 */
-void MessageDirector::handleData(std::shared_ptr<MDParticipant> participant, std::string &data)
+void MessageDirector::handleData(MDParticipant *participant, std::string &data)
 {
 	std::unique_ptr<NetworkReader> reader(new NetworkReader(data));
 
@@ -62,6 +93,12 @@ void MessageDirector::handleData(std::shared_ptr<MDParticipant> participant, std
 	// If we're not handling this message on the MD, route it.
 	if (recipient != (uint16_t)ParticipantTypes::MESSAGE_DIRECTOR_PID)
 	{
+		// First, we have to re-format a message writer.
+		std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
+		writer->addRaw(reader->getRemainingData());
+
+		// Route it.
+		this->routePid(recipient, writer.get());
 		return;
 	}
 
@@ -71,13 +108,31 @@ void MessageDirector::handleData(std::shared_ptr<MDParticipant> participant, std
 	{
 		case (uint16_t)MsgTypes::MESSAGE_DIRECTOR_SUBSCRIBE_PID:
 		{
+			this->handleSubscribePid(participant, reader.get());
 			break;
 		}
 
 		case (uint16_t)MsgTypes::MESSAGE_DIRECTOR_GENERATE_PID:
 		{
-			uint16_t pid = this->allocateParticipantId();
+			this->handleGeneratePid(participant);
 			break;
 		}
 	}
+}
+
+void MessageDirector::handleSubscribePid(MDParticipant *participant, NetworkReader *reader)
+{
+	uint16_t pid = reader->readUint16();
+	this->mapPid(pid, participant);
+}
+
+void MessageDirector::handleGeneratePid(MDParticipant *participant)
+{
+	uint16_t pid = this->allocateParticipantId();
+
+	std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
+	writer->addUint16((uint16_t)MsgTypes::MESSAGE_DIRECTOR_GENERATE_PID_RESP);
+	writer->addUint16(pid);
+
+	participant->send(writer.get());
 }

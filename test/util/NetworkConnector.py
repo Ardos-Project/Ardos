@@ -21,7 +21,18 @@ class NetworkConnector:
 		packet = writer.getData()
 		self.sock.send(packet)
 
+	def handlePacket(self, packet, handler):
+		reader = self.read()
+		if reader is None:
+			return
+
+		msg = reader.readUint16()
+		if msg != packet:
+			return
+			
+		handler(reader)
+
 	def read(self):
 		response = self.sock.recv(1024)
 		reader = NetworkReader(response)
-		print("Bytes: " + str(response))
+		return reader

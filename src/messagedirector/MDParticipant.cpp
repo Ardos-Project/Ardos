@@ -25,5 +25,5 @@ All incoming data is handled by the parent Message Director.
 */
 void MDParticipant::handleData(std::string &data)
 {
-	this->parent->handleData(shared_from_this(), data);
+	this->parent->handleData(this, data);
 }

@@ -2,6 +2,8 @@
 #define MESSAGE_DIRECTOR_H
 
 #include <set>
+#include <mutex>
+#include <unordered_map>
 #include <boost/asio.hpp>
 
 #include "core/MsgTypes.h"
@@ -20,15 +22,24 @@ class MessageDirector
 		MessageDirector(boost::asio::io_context *io_context, const boost::asio::ip::tcp::endpoint &endpoint);
 		~MessageDirector();
 
-		void handleData(std::shared_ptr<MDParticipant> participant, std::string &data);
+		void handleData(MDParticipant *participant, std::string &data);
 
 	private:
 		boost::asio::io_context *io_context;
 		boost::asio::ip::tcp::acceptor *tcp_acceptor;
 		std::atomic<uint16_t> participant_count;
+		std::mutex pid_lock;
+		std::unordered_map<uint16_t, MDParticipant*> pid_map;
 
 		void doAccept();
+
+		void mapPid(uint16_t pid, MDParticipant *participant);
+		void clearPid(uint16_t pid);
+		void routePid(uint16_t pid, NetworkWriter *writer);
 		uint16_t allocateParticipantId();
+
+		void handleSubscribePid(MDParticipant *participant, NetworkReader *reader);
+		void handleGeneratePid(MDParticipant *participant);
 };
 
 #endif // MESSAGE_DIRECTOR_H

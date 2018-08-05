@@ -26,6 +26,11 @@ void NetworkReader::checkReadOverflow(unsigned int bytes_to_read)
 	}
 }
 
+std::string NetworkReader::getRemainingData()
+{
+	return std::string(this->buffer + this->index).c_str();
+}
+
 int8_t NetworkReader::readInt8()
 {
 	this->checkReadOverflow(1);

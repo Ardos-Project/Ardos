@@ -1,5 +1,7 @@
 #include "net/NetworkWriter.h"
 
+#include "net/NetworkReader.h"
+
 NetworkWriter::NetworkWriter() : buffer(new char[64]), index(0)
 {}
 
@@ -23,7 +25,15 @@ unsigned int NetworkWriter::getSize()
 	return this->index;
 }
 
-void NetworkWriter::addInt8(int8_t &value)
+void NetworkWriter::addRaw(const std::string &value)
+{
+	this->checkAddOverflow(value.length());
+
+	std::memcpy(this->buffer + this->index, value.c_str(), value.length());
+	this->index += value.length();
+}
+
+void NetworkWriter::addInt8(const int8_t &value)
 {
 	this->checkAddOverflow(1);
 
@@ -31,7 +41,7 @@ void NetworkWriter::addInt8(int8_t &value)
 	this->index += 1;
 }
 
-void NetworkWriter::addUint8(uint8_t &value)
+void NetworkWriter::addUint8(const uint8_t &value)
 {
 	this->checkAddOverflow(1);
 
@@ -39,7 +49,7 @@ void NetworkWriter::addUint8(uint8_t &value)
 	this->index += 1;
 }
 
-void NetworkWriter::addInt16(int16_t &value)
+void NetworkWriter::addInt16(const int16_t &value)
 {
 	this->checkAddOverflow(2);
 
@@ -47,7 +57,7 @@ void NetworkWriter::addInt16(int16_t &value)
 	this->index += 2;
 }
 
-void NetworkWriter::addUint16(uint16_t &value)
+void NetworkWriter::addUint16(const uint16_t &value)
 {
 	this->checkAddOverflow(2);
 
