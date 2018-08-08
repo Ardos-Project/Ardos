@@ -1,6 +1,8 @@
 #ifndef STATE_SERVER_H
 #define STATE_SERVER_H
 
+#include <unordered_map>
+
 #include "core/MsgTypes.h"
 #include "notifier/Notify.h"
 #include "config/ConfigManager.h"
@@ -16,10 +18,13 @@ class StateServer : public NetworkClient
 		virtual void onConnect(const boost::system::error_code &err);
 		virtual void handleData(std::string &data);
 
-		void claimOwnership();
-
 	private:
 		boost::asio::io_context *io_context;
+		std::unordered_map<uint32_t, InstanceObject*> iobject_map;
+
+		uint32_t allocateInstanceId();
+		void claimOwnership();
+		void handleGenerateInstanceObject(NetworkReader *reader);
 };
 
 #endif // STATE_SERVER_H

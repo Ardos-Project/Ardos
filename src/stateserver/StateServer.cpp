@@ -35,9 +35,15 @@ void StateServer::handleData(std::string &data)
 	{
 		case (uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE:
 		{
+			this->handleGenerateInstanceObject(reader.get());
 			break;
 		}
 	}
+}
+
+uint32_t StateServer::allocateInstanceId()
+{
+
 }
 
 void StateServer::claimOwnership()
@@ -49,4 +55,33 @@ void StateServer::claimOwnership()
 	writer->addUint16((uint16_t)ParticipantTypes::STATE_SERVER_PID);
 
 	this->send(writer.get());
+}
+
+void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
+{
+	// Who sent us the generate message?
+	uint16_t sender_pid = reader->readUint16();
+
+	// TempId.
+	uint16_t temp_id = reader->readUint32();
+
+	// ParentId and ZoneId.
+	uint32_t parent_id = reader->readUint32();
+	uint32_t zone_id = reader->readUint32();
+
+	// Allocate a new Instance Id.
+	uint32_t instance_id = this->allocateInstanceId();
+
+	// Create and store the instance object.
+	try
+	{
+		// TODO: Create instance object.
+		return;
+	}
+	catch (std::exception &e)
+	{
+		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[SS]", "Error occoured when generating instance object");
+		// TODO: Free up ParticipantId.
+		return;
+	}
 }
