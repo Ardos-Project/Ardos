@@ -25,6 +25,9 @@ class NetworkReader
 		int16_t readInt16();
 		uint16_t readUint16();
 
+		int32_t readInt32();
+		uint32_t readUint32();
+
 		std::string readString();
 
 	private:

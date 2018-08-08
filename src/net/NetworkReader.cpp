@@ -71,6 +71,26 @@ uint16_t NetworkReader::readUint16()
 	return read;
 }
 
+int32_t NetworkReader::readInt32()
+{
+	this->checkReadOverflow(4);
+
+	int32_t read = *(int32_t*)(this->buffer + this->index);
+	this->index += 4;
+
+	return read;
+}
+
+uint32_t NetworkReader::readUint32()
+{
+	this->checkReadOverflow(4);
+
+	uint32_t read = *(uint32_t*)(this->buffer + this->index);
+	this->index += 4;
+
+	return read;
+}
+
 /*
 std::string NetworkReader::readString()
 {}

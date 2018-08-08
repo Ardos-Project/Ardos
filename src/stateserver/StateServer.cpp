@@ -26,6 +26,18 @@ void StateServer::onConnect(const boost::system::error_code &err)
 void StateServer::handleData(std::string &data)
 {
 	std::unique_ptr<NetworkReader> reader(new NetworkReader(data));
+
+	// Read the message type
+	uint16_t msg_type = reader->readUint16();
+
+	// Handle the message.
+	switch (msg_type)
+	{
+		case (uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE:
+		{
+			break;
+		}
+	}
 }
 
 void StateServer::claimOwnership()

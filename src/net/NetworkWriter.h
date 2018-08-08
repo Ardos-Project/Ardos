@@ -23,6 +23,9 @@ class NetworkWriter
 		void addInt16(const int16_t &value);
 		void addUint16(const uint16_t &value);
 
+		void addInt32(const int32_t &value);
+		void addUint32(const uint32_t &value);
+
 	private:
 		char* buffer;
 		unsigned int index;

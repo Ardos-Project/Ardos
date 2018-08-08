@@ -64,3 +64,19 @@ void NetworkWriter::addUint16(const uint16_t &value)
 	*(uint16_t*)(this->buffer + this->index) = value;
 	this->index += 2;
 }
+
+void NetworkWriter::addInt32(const int32_t &value)
+{
+	this->checkAddOverflow(4);
+
+	*(int32_t*)(this->buffer + this->index) = value;
+	this->index += 4;
+}
+
+void NetworkWriter::addUint32(const uint32_t &value)
+{
+	this->checkAddOverflow(4);
+
+	*(uint32_t*)(this->buffer + this->index) = value;
+	this->index += 4;
+}
