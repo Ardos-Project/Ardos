@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.10)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 project(Ardos)
 
+set (CMAKE_CXX_STANDARD 11)
+
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 
