@@ -38,6 +38,19 @@ set(ARDOS_NET
 	src/net/NetworkReader.h
 )
 
+set(ARDOS_DCLASS
+	src/dc/DCMethod.cpp
+	src/dc/DCMethod.h
+	src/dc/DClass.cpp
+	src/dc/DClass.h
+	src/dc/DCFile.cpp
+	src/dc/DCFile.h
+	src/dc/DCHashGenerator.cpp
+	src/dc/DCHashGenerator.h
+	src/dc/DCManager.cpp
+	src/dc/DCManager.h
+)
+
 set(ARDOS_MESSAGE_DIRECTOR
 	src/messagedirector/MDParticipant.cpp
 	src/messagedirector/MDParticipant.h
@@ -57,6 +70,7 @@ add_executable(ardos
 	${ARDOS_NOTIFY}
 	${ARDOS_CONFIG}
 	${ARDOS_NET}
+	${ARDOS_DCLASS}
 	${ARDOS_MESSAGE_DIRECTOR}
 	${ARDOS_STATE_SERVER}
 )
