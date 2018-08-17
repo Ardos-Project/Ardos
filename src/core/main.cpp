@@ -7,6 +7,7 @@
 #include "globals.h"
 #include "notifier/Notify.h"
 #include "config/ConfigManager.h"
+#include "dc/DCManager.h"
 #include "messagedirector/MessageDirector.h"
 #include "stateserver/StateServer.h"
 
@@ -48,6 +49,9 @@ int main(int argc, char *argv[])
 
 	// Load our either passed config file or default one.
 	ConfigManager::instance()->loadConfig(cfg_name);
+
+	// Load our dclass(es).
+	DCManager::instance()->loadDclass("test.dc.json");
 	
 	// Asio IO service. Used for async operations.
 	boost::asio::io_context io_context;
