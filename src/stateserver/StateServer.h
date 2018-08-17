@@ -8,6 +8,7 @@
 #include "config/ConfigManager.h"
 #include "core/ParticipantTypes.h"
 #include "net/NetworkClient.h"
+#include "stateserver/InstanceObject.h"
 
 class StateServer : public NetworkClient
 {

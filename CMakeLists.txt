@@ -46,6 +46,8 @@ set(ARDOS_MESSAGE_DIRECTOR
 )
 
 set(ARDOS_STATE_SERVER
+	src/stateserver/InstanceObject.cpp
+	src/stateserver/InstanceObject.h
 	src/stateserver/StateServer.cpp
 	src/stateserver/StateServer.h
 )

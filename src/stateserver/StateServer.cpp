@@ -43,7 +43,7 @@ void StateServer::handleData(std::string &data)
 
 uint32_t StateServer::allocateInstanceId()
 {
-
+	return uint32_t(1);
 }
 
 void StateServer::claimOwnership()
