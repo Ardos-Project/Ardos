@@ -10,7 +10,7 @@ DCManager* DCManager::instance()
 DCManager::DCManager()
 {}
 
-void DCManager::loadDclass(std::string dc_name)
+void DCManager::loadDCFile(std::string dc_name)
 {
 	std::ifstream dc_file(dc_name.c_str());
 
@@ -28,11 +28,16 @@ void DCManager::loadDclass(std::string dc_name)
 	}
 	catch (std::exception& e)
 	{
-		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[MAIN]", "Error parsing config file!");
+		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[DC]", "Error parsing dc file!");
 
 		std::cout << e.what() << std::endl;
 		std::exit(EXIT_FAILURE);
 	}
 
 	dc_file.close();
+}
+
+void DCManager::addDClass(std::string dclass_name, nlohmann::json dclass_data)
+{
+	
 }

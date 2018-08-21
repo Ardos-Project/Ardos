@@ -5,3 +5,6 @@ DClass::DClass()
 
 DClass::~DClass()
 {}
+
+void DClass::loadInheritedMethods()
+{}

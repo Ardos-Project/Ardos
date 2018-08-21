@@ -10,6 +10,8 @@ class DClass
 		DClass();
 		~DClass();
 
+		void loadInheritedMethods();
+
 	private:
 };
 

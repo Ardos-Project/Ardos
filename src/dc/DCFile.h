@@ -2,8 +2,10 @@
 #define DC_FILE_H
 
 #include <nlohmann/json.hpp>
+#include <algorithm> // std::sort
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include "notifier/Notify.h"
 #include "config/ConfigManager.h"
@@ -20,8 +22,13 @@ class DCFile
 	private:
 		DCManager *parent;
 		nlohmann::json dc_data;
+		std::vector<std::string> sorted_classes;
 
 		void parseDCFile();
+
+		void loadTypeDefs();
+		void loadStructs();
+		void loadDistributedObjects();
 };
 
 #endif // DC_FILE_H

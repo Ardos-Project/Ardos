@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 	ConfigManager::instance()->loadConfig(cfg_name);
 
 	// Load our dclass(es).
-	DCManager::instance()->loadDclass("test.dc.json");
+	DCManager::instance()->loadDCFile("test.dc.json");
 	
 	// Asio IO service. Used for async operations.
 	boost::asio::io_context io_context;
