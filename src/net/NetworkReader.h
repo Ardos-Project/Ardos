@@ -17,6 +17,7 @@ class NetworkReader
 		NetworkReader(NetworkWriter &data, unsigned int offset = 0);
 		~NetworkReader();
 
+		std::string readData(unsigned int length);
 		std::string getRemainingData();
 
 		int8_t readInt8();

@@ -63,7 +63,7 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 	uint16_t sender_pid = reader->readUint16();
 
 	// TempId.
-	uint16_t temp_id = reader->readUint32();
+	uint32_t temp_id = reader->readUint32();
 
 	// ParentId and ZoneId.
 	uint32_t parent_id = reader->readUint32();
