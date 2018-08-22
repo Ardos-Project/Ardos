@@ -70,3 +70,4 @@ void DCFile::loadDistributedObjects()
 	{
 		this->parent->dclasses_by_name[dclass.key()].loadInheritedMethods();
 	}
+}
