@@ -19,8 +19,14 @@ class StateServer : public NetworkClient
 		virtual void onConnect(const boost::system::error_code &err);
 		virtual void handleData(std::string &data);
 
+		bool validateParentId(uint32_t parent_id);
+		void mapInstanceId(uint32_t instance_id, InstanceObject *object);
+		void clearInstanceId(uint32_t instance_id);
+		void routeInstanceId(uint32_t instance_id, NetworkReader *reader);
+
 	private:
 		boost::asio::io_context *io_context;
+		std::mutex instance_map_lock;
 		std::unordered_map<uint32_t, InstanceObject*> iobject_map;
 
 		uint32_t allocateInstanceId();

@@ -75,13 +75,76 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 	// Create and store the instance object.
 	try
 	{
-		// TODO: Create instance object.
-		return;
+		std::make_shared<InstanceObject>(this)->generate(instance_id, sender_pid, parent_id, zone_id, reader);
 	}
 	catch (std::exception &e)
 	{
-		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[SS]", "Error occoured when generating instance object");
+		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[SS]", "Error occoured when generating Instance Object");
+
 		// TODO: Free up ParticipantId.
+
+		// Notify the sender of an unsuccessful generation.
+		std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
+
+		writer->addUint16(sender_pid);
+		writer->addUint16((uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
+		writer->addUint8(0);
+		writer->addUint32(temp_id);
+
+		this->send(writer.get());
 		return;
 	}
+
+	// Notify the sender of the successful generation.
+	std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
+
+	writer->addUint16(sender_pid);
+	writer->addUint16((uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
+	writer->addUint8(1);
+	writer->addUint32(temp_id);
+	writer->addUint32(instance_id);
+
+	this->send(writer.get());
+}
+
+void StateServer::mapInstanceId(uint32_t instance_id, InstanceObject *object)
+{
+	std::lock_guard<std::mutex> guard(this->instance_map_lock);
+
+	if (this->iobject_map.count(instance_id))
+	{
+		Notify::instance()->log(NotifyGlobals::NOTIFY_WARNING, "[SS]", "Attempted to map existing instance id");
+		return;
+	}
+
+	this->iobject_map[instance_id] = object;
+}
+
+void StateServer::clearInstanceId(uint32_t instance_id)
+{
+	std::lock_guard<std::mutex> guard(this->instance_map_lock);
+
+	this->iobject_map.erase(instance_id);
+}
+
+void StateServer::routeInstanceId(uint32_t instance_id, NetworkReader *reader)
+{
+	if (!this->iobject_map.count(instance_id))
+	{
+		Notify::instance()->log(NotifyGlobals::NOTIFY_WARNING, "[SS]", "Attempted to route to non-existent instance object");
+		return;
+	}
+
+	this->iobject_map[instance_id]->handleData(reader);
+}
+
+bool StateServer::validateParentId(uint32_t parent_id)
+{
+	// 1 - 'Root' of the State Server tree. Always valid as a parent.
+	if (parent_id == 1 || this->iobject_map.count(parent_id))
+	{
+		return true;
+	}
+
+	return false;
 }
