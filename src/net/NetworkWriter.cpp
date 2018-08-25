@@ -25,6 +25,12 @@ unsigned int NetworkWriter::getSize()
 	return this->index;
 }
 
+void NetworkWriter::addHeader(const uint16_t &pid, const uint16_t &msg_type)
+{
+	this->addUint16(pid);
+	this->addUint16(msg_type);
+}
+
 void NetworkWriter::addRaw(const std::string &value)
 {
 	this->checkAddOverflow(value.length());

@@ -15,6 +15,7 @@ class NetworkWriter
 		char* getData();
 		unsigned int getSize();
 
+		void addHeader(const uint16_t &pid, const uint16_t &msg_type);
 		void addRaw(const std::string &value);
 
 		void addInt8(const int8_t &value);

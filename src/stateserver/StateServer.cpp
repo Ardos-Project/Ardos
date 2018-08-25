@@ -55,8 +55,7 @@ void StateServer::claimOwnership()
 {
 	std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
 
-	writer->addUint16((uint16_t)ParticipantTypes::MESSAGE_DIRECTOR_PID);
-	writer->addUint16((uint16_t)MsgTypes::MESSAGE_DIRECTOR_SUBSCRIBE_PID);
+	writer->addHeader((uint16_t)ParticipantTypes::MESSAGE_DIRECTOR_PID, (uint16_t)MsgTypes::MESSAGE_DIRECTOR_SUBSCRIBE_PID);
 	writer->addUint16((uint16_t)ParticipantTypes::STATE_SERVER_PID);
 
 	this->send(writer.get());
@@ -92,8 +91,7 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 		// Notify the sender of an unsuccessful generation.
 		std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
 
-		writer->addUint16(sender_pid);
-		writer->addUint16((uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
+		writer->addHeader(sender_pid, (uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
 		writer->addUint8(0); // Failed to generate. 0 = False.
 		writer->addUint32(temp_id);
 
@@ -104,8 +102,7 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 	// Notify the sender of the successful generation.
 	std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
 
-	writer->addUint16(sender_pid);
-	writer->addUint16((uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
+	writer->addHeader(sender_pid, (uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
 	writer->addUint8(1); // Successful generation. 1 = True.
 	writer->addUint32(temp_id);
 	writer->addUint32(instance_id);
