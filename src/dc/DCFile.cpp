@@ -68,6 +68,6 @@ void DCFile::loadDistributedObjects()
 	// This is done by order of definition in the DClass.
 	for (auto dclass = this->dc_data["classes"].begin(); dclass != this->dc_data["classes"].end(); ++dclass)
 	{
-		this->parent->dclasses_by_name[dclass.key()].loadInheritedMethods();
+		this->parent->dclasses_by_name[dclass.key()]->loadInheritedMethods();
 	}
 }
