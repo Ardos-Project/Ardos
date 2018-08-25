@@ -16,6 +16,11 @@ set(ARDOS_CORE
 	src/core/main.cpp
 )
 
+set(ARDOS_UTIL
+	src/util/UIDAllocator.cpp
+	src/util/UIDAllocator.h
+)
+
 set(ARDOS_NOTIFY
 	src/notifier/NotifyGlobals.h
 	src/notifier/Notify.cpp
@@ -59,6 +64,10 @@ set(ARDOS_MESSAGE_DIRECTOR
 )
 
 set(ARDOS_STATE_SERVER
+	src/stateserver/ClientWithInterest.cpp
+	src/stateserver/ClientWithInterest.h
+	src/stateserver/InterestManager.cpp
+	src/stateserver/InterestManager.h
 	src/stateserver/InstanceObject.cpp
 	src/stateserver/InstanceObject.h
 	src/stateserver/StateServer.cpp
@@ -67,6 +76,7 @@ set(ARDOS_STATE_SERVER
 
 add_executable(ardos
 	${ARDOS_CORE}
+	${ARDOS_UTIL}
 	${ARDOS_NOTIFY}
 	${ARDOS_CONFIG}
 	${ARDOS_NET}

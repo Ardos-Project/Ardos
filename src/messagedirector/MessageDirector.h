@@ -11,6 +11,7 @@
 #include "config/ConfigManager.h"
 #include "core/ParticipantTypes.h"
 #include "messagedirector/MDParticipant.h"
+#include "util/UIDAllocator.h"
 
 class MessageDirector
 {
@@ -27,7 +28,7 @@ class MessageDirector
 	private:
 		boost::asio::io_context *io_context;
 		boost::asio::ip::tcp::acceptor *tcp_acceptor;
-		std::atomic<uint16_t> participant_count;
+		UIDAllocator *pid_allocator;
 		std::mutex pid_lock;
 		std::unordered_map<uint16_t, MDParticipant*> pid_map;
 
@@ -36,7 +37,6 @@ class MessageDirector
 		void mapPid(uint16_t pid, MDParticipant *participant);
 		void clearPid(uint16_t pid);
 		void routePid(uint16_t pid, NetworkWriter *writer);
-		uint16_t allocateParticipantId();
 
 		void handleSubscribePid(MDParticipant *participant, NetworkReader *reader);
 		void handleGeneratePid(MDParticipant *participant);

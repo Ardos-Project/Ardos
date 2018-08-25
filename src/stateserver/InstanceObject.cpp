@@ -22,10 +22,10 @@ void InstanceObject::generate(uint32_t instance_id, uint32_t owner_pid, uint32_t
 	this->owner_pid = owner_pid;
 
 	// Validate the ParentId.
-	bool valid_parent = this->parent->validateParentId(parent_id);
+	bool valid_parent = this->parent->validateParentId(parent_id, instance_id);
 	if (!valid_parent)
 	{
-		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[SS]", "Attempted to generate Instance Object with non-existent ParentId");
+		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[SS]", "Attempted to generate Instance Object with invalid ParentId");
 		throw std::exception("Error Generating Instance Object");
 	}
 

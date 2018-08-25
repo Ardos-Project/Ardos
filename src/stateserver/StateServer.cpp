@@ -4,10 +4,20 @@ StateServer::StateServer(boost::asio::io_context *io_context, boost::asio::ip::t
 {
 	Notify::instance()->log(NotifyGlobals::NOTIFY_INFO, "[SS]", "State Server Online!");
 	this->io_context = io_context;
+
+	// Used for allocating new Instance Object Id's.
+	this->id_allocator = new UIDAllocator(0, 0xffffffff); // Maximum of ~4.2 billion Instance Objects at any given time.
+
+	// Manages the Instance Object 'tree' and is responsible for both culling and sending generate messages.
+	// If we were to have memory leaks anywhere, it would be here due to its highly distributed nature.
+	this->interest_manager = new InterestManager(this);
 }
 
 StateServer::~StateServer()
-{}
+{
+	delete this->id_allocator;
+	delete this->interest_manager;
+}
 
 void StateServer::onConnect(const boost::system::error_code &err)
 {
@@ -41,11 +51,6 @@ void StateServer::handleData(std::string &data)
 	}
 }
 
-uint32_t StateServer::allocateInstanceId()
-{
-	return uint32_t(1);
-}
-
 void StateServer::claimOwnership()
 {
 	std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
@@ -70,7 +75,7 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 	uint32_t zone_id = reader->readUint32();
 
 	// Allocate a new Instance Id.
-	uint32_t instance_id = this->allocateInstanceId();
+	uint32_t instance_id = this->id_allocator->allocate();
 
 	// Create and store the instance object.
 	try
@@ -81,14 +86,15 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 	{
 		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[SS]", "Error occoured when generating Instance Object");
 
-		// TODO: Free up ParticipantId.
+		// Free up the Participant Id.
+		this->id_allocator->free(instance_id);
 
 		// Notify the sender of an unsuccessful generation.
 		std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
 
 		writer->addUint16(sender_pid);
 		writer->addUint16((uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
-		writer->addUint8(0);
+		writer->addUint8(0); // Failed to generate. 0 = False.
 		writer->addUint32(temp_id);
 
 		this->send(writer.get());
@@ -100,7 +106,7 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 
 	writer->addUint16(sender_pid);
 	writer->addUint16((uint16_t)MsgTypes::STATE_SERVER_GENERATE_INSTANCE_RESP);
-	writer->addUint8(1);
+	writer->addUint8(1); // Successful generation. 1 = True.
 	writer->addUint32(temp_id);
 	writer->addUint32(instance_id);
 
@@ -138,10 +144,10 @@ void StateServer::routeInstanceId(uint32_t instance_id, NetworkReader *reader)
 	this->iobject_map[instance_id]->handleData(reader);
 }
 
-bool StateServer::validateParentId(uint32_t parent_id)
+bool StateServer::validateParentId(uint32_t parent_id, uint32_t origin_id)
 {
 	// 1 - 'Root' of the State Server tree. Always valid as a parent.
-	if (parent_id == 1 || this->iobject_map.count(parent_id))
+	if (parent_id == 1 || (this->iobject_map.count(parent_id) && parent_id != origin_id))
 	{
 		return true;
 	}

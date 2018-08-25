@@ -7,7 +7,8 @@ MessageDirector::MessageDirector(boost::asio::io_context *io_context, const tcp:
 	Notify::instance()->log(NotifyGlobals::NOTIFY_INFO, "[MD]", "Message Director Online.");
 	this->io_context = io_context;
 
-	this->participant_count = (uint16_t)ParticipantTypes::PID_RANGE_START;
+	// PID allocator.
+	this->pid_allocator = new UIDAllocator((uint16_t)ParticipantTypes::PID_RANGE_START, (uint16_t)ParticipantTypes::PID_RANGE_END);
 
 	// Create the socket object.
 	this->tcp_acceptor = new tcp::acceptor(*this->io_context, endpoint);
@@ -19,6 +20,8 @@ MessageDirector::MessageDirector(boost::asio::io_context *io_context, const tcp:
 MessageDirector::~MessageDirector()
 {
 	Notify::instance()->log(NotifyGlobals::NOTIFY_VERBOSE, "[MD]", "Destroying Message Director...");
+	delete this->pid_allocator;
+	delete this->tcp_acceptor;
 }
 
 void MessageDirector::doAccept()
@@ -64,20 +67,6 @@ void MessageDirector::routePid(uint16_t pid, NetworkWriter *writer)
 	}
 
 	this->pid_map[pid]->send(writer);
-}
-
-uint16_t MessageDirector::allocateParticipantId()
-{
-	if (this->participant_count + 1 > (uint16_t)ParticipantTypes::PID_RANGE_END)
-	{
-		Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[MD]", "Ran out of Participant Id's");
-		throw std::exception("Participant Id Allocation Error");
-	}
-
-	uint16_t pid = this->participant_count;
-	this->participant_count++;
-
-	return pid;
 }
 
 /*
@@ -128,7 +117,7 @@ void MessageDirector::handleSubscribePid(MDParticipant *participant, NetworkRead
 
 void MessageDirector::handleGeneratePid(MDParticipant *participant)
 {
-	uint16_t pid = this->allocateParticipantId();
+	uint16_t pid = this->pid_allocator->allocate();
 
 	std::unique_ptr<NetworkWriter> writer(new NetworkWriter());
 	writer->addUint16((uint16_t)MsgTypes::MESSAGE_DIRECTOR_GENERATE_PID_RESP);

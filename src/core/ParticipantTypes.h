@@ -17,7 +17,7 @@ enum class ParticipantTypes
 
 	// First 100 reserved for pre-allocated ID's.
 	PID_RANGE_START = 101,
-	PID_RANGE_END = 65534 // Max uint16 size - 1
+	PID_RANGE_END = 65535 // Max uint16 size.
 };
 
 #endif // PARTICIPANT_TYPES_H

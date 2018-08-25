@@ -9,6 +9,8 @@
 #include "core/ParticipantTypes.h"
 #include "net/NetworkClient.h"
 #include "stateserver/InstanceObject.h"
+#include "util/UIDAllocator.h"
+#include "stateserver/InterestManager.h"
 
 class StateServer : public NetworkClient
 {
@@ -19,7 +21,7 @@ class StateServer : public NetworkClient
 		virtual void onConnect(const boost::system::error_code &err);
 		virtual void handleData(std::string &data);
 
-		bool validateParentId(uint32_t parent_id);
+		bool validateParentId(uint32_t parent_id, uint32_t origin_id = 1);
 		void mapInstanceId(uint32_t instance_id, InstanceObject *object);
 		void clearInstanceId(uint32_t instance_id);
 		void routeInstanceId(uint32_t instance_id, NetworkReader *reader);
@@ -27,9 +29,10 @@ class StateServer : public NetworkClient
 	private:
 		boost::asio::io_context *io_context;
 		std::mutex instance_map_lock;
+		UIDAllocator *id_allocator;
 		std::unordered_map<uint32_t, InstanceObject*> iobject_map;
+		InterestManager *interest_manager;
 
-		uint32_t allocateInstanceId();
 		void claimOwnership();
 		void handleGenerateInstanceObject(NetworkReader *reader);
 };
