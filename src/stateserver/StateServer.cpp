@@ -127,7 +127,11 @@ void StateServer::clearInstanceId(uint32_t instance_id)
 {
 	std::lock_guard<std::mutex> guard(this->instance_map_lock);
 
+	// Remove it from our map.
 	this->iobject_map.erase(instance_id);
+
+	// Free up the instance id.
+	this->id_allocator->free(instance_id);
 }
 
 void StateServer::routeInstanceId(uint32_t instance_id, NetworkReader *reader)
