@@ -40,7 +40,7 @@ void InstanceObject::generate(uint32_t instance_id, uint32_t owner_pid, uint32_t
 	this->unpackRequiredFields(reader);
 
 	// This Instance Object can now receive updates.
-	this->parent->mapInstanceId(instance_id, this);
+	this->parent->mapInstanceId(instance_id, shared_from_this());
 
 	// TODO: Interest.
 }

@@ -6,7 +6,7 @@ StateServer::StateServer(boost::asio::io_context *io_context, boost::asio::ip::t
 	this->io_context = io_context;
 
 	// Used for allocating new Instance Object Id's.
-	this->id_allocator = new UIDAllocator(0, 0xffffffff); // Maximum of ~4.2 billion Instance Objects at any given time.
+	this->id_allocator = new UIDAllocator(1, 0xffffffff); // Maximum of ~4.2 billion Instance Objects at any given time.
 
 	// Manages the Instance Object 'tree' and is responsible for both culling and sending generate messages.
 	// If we were to have memory leaks anywhere, it would be here due to its highly distributed nature.
@@ -110,7 +110,7 @@ void StateServer::handleGenerateInstanceObject(NetworkReader *reader)
 	this->send(writer.get());
 }
 
-void StateServer::mapInstanceId(uint32_t instance_id, InstanceObject *object)
+void StateServer::mapInstanceId(uint32_t instance_id, std::shared_ptr<InstanceObject> object)
 {
 	std::lock_guard<std::mutex> guard(this->instance_map_lock);
 
