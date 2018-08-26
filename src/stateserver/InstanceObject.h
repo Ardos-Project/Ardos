@@ -23,6 +23,8 @@ class InstanceObject : public std::enable_shared_from_this<InstanceObject>
 		uint32_t owner_pid;
 		uint32_t parent_id;
 		uint32_t zone_id;
+
+		void unpackRequiredFields(NetworkReader *reader);
 };
 
 #endif // INSTANCE_OBJECT_H

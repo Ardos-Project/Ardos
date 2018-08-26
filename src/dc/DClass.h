@@ -18,6 +18,7 @@ class DClass
 		DClass(DCManager *manager, std::string &dclass_name, nlohmann::json &dclass_data);
 		~DClass();
 
+		DCManager *parent;
 		int dclass_index;
 		std::unordered_map<std::string, DCMethod*> methods_by_name;
 		std::unordered_map<int, DCMethod*> methods_by_id;
@@ -25,7 +26,6 @@ class DClass
 		void loadInheritedMethods();
 
 	private:
-		DCManager *parent;
 		std::string name;
 		nlohmann::json data;
 		int method_index;

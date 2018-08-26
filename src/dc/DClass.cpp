@@ -28,7 +28,7 @@ void DClass::loadMethods()
 	{
 		try
 		{
-			DCMethod *dcMethod = new DCMethod();
+			DCMethod *dcMethod = new DCMethod(this, method.key(), this->data[method.key()]);
 			this->methods_by_name[method.key()] = dcMethod;
 		}
 		catch (std::exception& e)
@@ -36,6 +36,22 @@ void DClass::loadMethods()
 			Notify::instance()->log(NotifyGlobals::NOTIFY_ERROR, "[DC]", "Could not generate DCMethod: " + this->name);
 			return;
 		}
+	}
+
+	// Sort our methods.
+	for (auto method : this->methods_by_name)
+	{
+		this->sorted_methods.push_back(method.first);
+	}
+
+	std::sort(this->sorted_methods.begin(), this->sorted_methods.end());
+
+	// Allocate Id's for each method.
+	for (auto method : this->sorted_methods)
+	{
+		this->methods_by_id[this->method_index] = this->methods_by_name[method];
+		this->methods_by_id[this->method_index]->method_index = this->method_index;
+		this->method_index++;
 	}
 }
 

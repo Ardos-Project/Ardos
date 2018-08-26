@@ -20,6 +20,7 @@ class DCManager
 	public:
 		static DCManager* instance();
 
+		DCHashGenerator *hash_generator;
 		std::unordered_set<std::string> dclasses;
 		std::unordered_map<std::string, DClass*> dclasses_by_name;
 		std::unordered_map<int, DClass*> dclasses_by_id;
@@ -31,7 +32,6 @@ class DCManager
 		static DCManager* _instance;
 
 		int dclass_index;
-		DCHashGenerator *hash_generator;
 
 		DCManager(); // Prevent accidental object creation.
 };

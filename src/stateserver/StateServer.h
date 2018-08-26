@@ -8,6 +8,7 @@
 #include "config/ConfigManager.h"
 #include "core/ParticipantTypes.h"
 #include "net/NetworkClient.h"
+#include "dc/DCManager.h"
 #include "stateserver/InstanceObject.h"
 #include "util/UIDAllocator.h"
 #include "stateserver/InterestManager.h"

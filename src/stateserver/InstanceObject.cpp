@@ -35,7 +35,10 @@ void InstanceObject::generate(uint32_t instance_id, uint32_t owner_pid, uint32_t
 	// Set our parent id and zone id.
 	this->parent_id = parent_id;
 	this->zone_id = zone_id;
-	
+
+	// Unpack required fields.
+	this->unpackRequiredFields(reader);
+
 	// This Instance Object can now receive updates.
 	this->parent->mapInstanceId(instance_id, this);
 
@@ -45,4 +48,9 @@ void InstanceObject::generate(uint32_t instance_id, uint32_t owner_pid, uint32_t
 void InstanceObject::handleData(NetworkReader *reader)
 {
 	
+}
+
+void InstanceObject::unpackRequiredFields(NetworkReader *reader)
+{
+
 }
