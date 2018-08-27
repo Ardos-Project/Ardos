@@ -22,7 +22,7 @@ class StateServer : public NetworkClient
 		virtual void onConnect(const boost::system::error_code &err);
 		virtual void handleData(std::string &data);
 
-		bool validateParentId(uint32_t parent_id, uint32_t origin_id = 1);
+		bool validateParentId(uint32_t parent_id, uint32_t origin_id = 0);
 		void mapInstanceId(uint32_t instance_id, std::shared_ptr<InstanceObject> object);
 		void clearInstanceId(uint32_t instance_id);
 		void routeInstanceId(uint32_t instance_id, NetworkReader *reader);
